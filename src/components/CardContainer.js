@@ -68,14 +68,14 @@ const CardContainer = ({ cards }) => {
     return (
       <div className="card-container">
         <CurrentCard card={currentCard} checkAnswer={checkAnswer} />
-        <button onClick={next}>Next</button>
+        <button autoFocus onClick={next}>Next</button>
       </div>
     );
   } else if ("completed" === currentState) {
     return (
       <div className="card-container">
         <CurrentCard card={currentCard} checkAnswer={checkAnswer} />
-        <button onClick={showSummary}>Show Summary</button>
+        <button autoFocus onClick={showSummary}>Show Summary</button>
       </div>
     );
   } else if ("summary" === currentState) {
@@ -112,10 +112,12 @@ function AnswerInput({ card, checkAnswer }) {
 const TextAnswerInput = ({ checkAnswer }) => {
   const [textClassName, setTextClassName] = useState("");
   const [answer, setAnswer] = useState("");
+  const [correctlyAnswered, setCorrectlyAnswered] = useState(false);
   const correctCallback = () => {
     console.log("correct");
     setAnswer("");
     setTextClassName("correct-guess");
+    setCorrectlyAnswered(true);
   };
   const incorrectCallback = () => {
     console.log("incorrect");
@@ -125,6 +127,10 @@ const TextAnswerInput = ({ checkAnswer }) => {
   return (
     <div>
       <input
+        onKeyPress={(e) => e.key === 'Enter'
+          ? checkAnswer(answer, correctCallback, incorrectCallback)
+        : ""}
+        autoFocus={!correctlyAnswered}
         className={textClassName}
         type="text"
         value={answer}
